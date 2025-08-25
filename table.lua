@@ -71,4 +71,9 @@ table.sum = function(tbl)
     return a
 end 
 
+table.rsort = function(tbl, cb) 
+    tbl.sort(cb) 
+    return tbl 
+end 
+
 setreadonly(table, true)
