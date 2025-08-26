@@ -84,6 +84,15 @@ table.map = function(tbl, cb)
     
     return res
 end 
-
+table.removeValue = function(tbl, key) 
+    local Result = {} 
+    for Index, Value in tbl do 
+        if Value ~= key then 
+            Result[Index] = Value
+        end 
+    end 
+    
+    tbl = Result
+end 
 
 setreadonly(table, true)
