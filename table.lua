@@ -1,5 +1,5 @@
 setreadonly(table, false)
-table.remove = function(tbl, key) 
+table._remove = function(tbl, key) 
     local Result = {} 
     for Index, Value in tbl do 
         if Index ~= key then 
