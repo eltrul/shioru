@@ -76,4 +76,14 @@ table.rsort = function(tbl, cb)
     return tbl 
 end 
 
+table.map = function(tbl, cb) 
+    local res = {} 
+    for i, v in tbl do 
+        table.insert(res, cb(i, v)) 
+    end 
+    
+    return res
+end 
+
+
 setreadonly(table, true)
