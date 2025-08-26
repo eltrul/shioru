@@ -72,7 +72,7 @@ table.sum = function(tbl)
 end 
 
 table.rsort = function(tbl, cb) 
-    tbl.sort(cb) 
+    table.sort(tbl, cb) 
     return tbl 
 end 
 
