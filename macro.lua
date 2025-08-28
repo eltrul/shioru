@@ -40,7 +40,7 @@ function MacroRecorder.SubmitData (data)
     MacroRecorder.LastEmitted = tick()
     for i, v in MacroRecorder.Callbacks do 
         if v[1] == 'NewKeyframeSubmitted' then 
-            v[2](data)
+            spawn(v[2], data)
         end 
     end 
 end 
