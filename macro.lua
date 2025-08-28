@@ -51,7 +51,8 @@ function MacroRecorder.On(EventType, Callback)
         Callbacks
     })
 end 
-hookmetamethod(game, '__namecall', newcclosure(function(self, ...)
+local old 
+old = hookmetamethod(game, '__namecall', newcclosure(function(self, ...)
     if self and typeof(self) == 'Instance' and tostring(self.Parent) == 'RemoteFunctions' then 
         if MacroRecorder.IsRecording then 
             MacroRecorder.SubmitData({
@@ -60,6 +61,7 @@ hookmetamethod(game, '__namecall', newcclosure(function(self, ...)
             })
         end 
     end 
+    return old(self, ...)
 end))
 
 return MacroRecorder
