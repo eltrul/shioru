@@ -55,7 +55,8 @@ end
 local old 
 old = hookmetamethod(game, '__namecall', newcclosure(function(self, ...)
     if self and typeof(self) == 'Instance' and tostring(self.Parent) == 'RemoteFunctions' then 
-        if MacroRecorder.IsRecording then 
+        if  MacroRecorder.IsRecording then 
+            print(getnamecallmethod(), ...)
             MacroRecorder.SubmitData({
                 type = getnamecallmethod(), 
                 data = {...}
