@@ -52,8 +52,10 @@ function MacroRecorder.On(EventType, Callback)
     })
 end
 
-local old 
-old = hookmetamethod(game, '__namecall', newcclosure(function(self, ...)
+local tbl = getrawmetatable(game) 
+local old = tbl.__namecall
+setreadonly(tbl, false) 
+tbl.__namecall = newcclosure(function(self, ...)
     if self and typeof(self) == 'Instance' and tostring(self.Parent) == 'RemoteFunctions' then 
         if  MacroRecorder.IsRecording then 
             print(getnamecallmethod(), ...)
@@ -64,6 +66,7 @@ old = hookmetamethod(game, '__namecall', newcclosure(function(self, ...)
         end 
     end 
     return old(self, unpack({...}))
-end))
+end) 
+setreadonly(tbl, true)
 
 return MacroRecorder
