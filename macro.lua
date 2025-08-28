@@ -29,7 +29,7 @@ function MacroRecorder.GetRecordData ()
 end 
 
 function MacroRecorder.SubmitData (data) 
-    MacroRecorder.Keyframes.push({
+    table.insert(MacroRecorder.Keyframes, {
         type = 'wait', 
         data = tick() - MacroRecorder.LastEmitted
     }) 
@@ -45,12 +45,13 @@ function MacroRecorder.SubmitData (data)
     end 
 end 
 
-function MacroRecorder.On(EventType, Callback) 
+function MacroRecorder.On(EventType, Callback)
     table.insert(MacroRecorder.Callbacks, {
         EventType,
-        Callbacks
+        Callback
     })
-end 
+end
+
 local old 
 old = hookmetamethod(game, '__namecall', newcclosure(function(self, ...)
     if self and typeof(self) == 'Instance' and tostring(self.Parent) == 'RemoteFunctions' then 
@@ -61,7 +62,7 @@ old = hookmetamethod(game, '__namecall', newcclosure(function(self, ...)
             })
         end 
     end 
-    return old(self, ...)
+    return old(self, unpack({...}))
 end))
 
 return MacroRecorder
