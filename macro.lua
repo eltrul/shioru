@@ -40,7 +40,9 @@ function MacroRecorder.SubmitData (data)
     MacroRecorder.LastEmitted = tick()
     for i, v in MacroRecorder.Callbacks do 
         if v[1] == 'NewKeyframeSubmitted' then 
-            spawn(v[2], data)
+            spawn(function() 
+                v[2](data)
+            end)
         end 
     end 
 end 
@@ -61,6 +63,7 @@ tbl.__namecall = (function(self, ...)
             print(getnamecallmethod(), ...)
             MacroRecorder.SubmitData({
                 type = getnamecallmethod(), 
+                name = tostring(self),
                 data = {...}
             })
         end 
