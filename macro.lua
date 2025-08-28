@@ -33,7 +33,7 @@ function MacroRecorder.SubmitData (data)
         type = 'wait', 
         data = tick() - MacroRecorder.LastEmitted
     }) 
-    MacroRecorder.Keyframes.push({
+    table.insert(MacroRecorder.Keyframes, {
         type = data.type, 
         data = data.data
     })
