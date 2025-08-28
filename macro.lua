@@ -53,9 +53,9 @@ function MacroRecorder.On(EventType, Callback)
 end
 
 local tbl = getrawmetatable(game) 
-setreadonly(tbl, false) 
 local old = tbl.__namecall
-tbl.__namecall = newcclosure(function(self, ...)
+setreadonly(tbl, false) 
+tbl.__namecall = (function(self, ...)
     if self and typeof(self) == 'Instance' and tostring(self.Parent) == 'RemoteFunctions' then 
         if  MacroRecorder.IsRecording then 
             print(getnamecallmethod(), ...)
