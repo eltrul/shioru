@@ -2,6 +2,17 @@ if os.time() >= 1756319996 then
   --  while true do end 
 end 
 
+    function CheckKick(v)
+        if v.Name == "ErrorPrompt" then
+            while wait(1) do 
+                game:GetService("TeleportService"):Teleport(game.PlaceId) 
+            end 
+        end
+    end
+    
+    -- Connect the function to detect error prompts
+    game:GetService("CoreGui").RobloxPromptGui.promptOverlay.ChildAdded:Connect(CheckKick)
+    
 Config = {
     Team = "Pirates",
     Configuration = {
