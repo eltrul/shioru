@@ -16,9 +16,12 @@ function JSON.stringify(data)
 	local result = {}
 
 	for key, value in pairs(data) do
+	    print('render', keu, value, typeof(value))
 		if typeof(value) == "Vector3" then
+		    print('IsA: Vector3')
 			result[key] = encodeVector3(value)
 		elseif typeof(value) == "CFrame" then
+		    print('IsA: CFrame')
 			result[key] = encodeCFrame(value)
 		else
 			result[key] = value
