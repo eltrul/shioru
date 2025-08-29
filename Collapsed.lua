@@ -10,9 +10,7 @@ end
         end
     end
     
-    -- Connect the function to detect error prompts
-    game:GetService("CoreGui").RobloxPromptGui.promptOverlay.ChildAdded:Connect(CheckKick)
-    
+
 Config = {
     Team = "Pirates",
     Configuration = {
@@ -3621,7 +3619,15 @@ FunctionsHandler.RaidController:RegisterMethod("GetCurrentRaidIsland", function(
     end 
 end)
 
-
+function CheckSpecialMicrochip() 
+    for _, v in { LocalPlayer.Character:GetChildren(), LocalPlayer.Backpack:GetChildren() } do
+        for _, v2 in v do 
+            if v.Name == 'Special Microchip' then 
+                return v
+            end 
+        end 
+    end 
+end 
 FunctionsHandler.RaidController:RegisterMethod("Refresh", function() 
     local Level = ScriptStorage.PlayerData.Level
     local Fragments = ScriptStorage.PlayerData.Fragments
@@ -3637,7 +3643,7 @@ FunctionsHandler.RaidController:RegisterMethod("Refresh", function()
     if RaidFruit then
         FunctionsHandler.RaidController:Set("CurrentProgressLevel", RaidFruit)
     end 
-    return RaidFruit or FunctionsHandler.RaidController.Methods.GetCurrentRaidIsland:Call() 
+    return RaidFruit or FunctionsHandler.RaidController.Methods.GetCurrentRaidIsland:Call() or CheckSpecialMicrochip()
 end)
 
 FunctionsHandler.RaidController:RegisterMethod("Start", function()
