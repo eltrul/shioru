@@ -119,7 +119,7 @@ function Report(Message)
         local AffectedIndexes = {0,0,0,0}
         
         request({
-            Url = "https://discord.com/api/webhooks/1390266261463896094/ivMzOjesYZoQZt9hxl-1Rzb-adT4Vd6QO6A2J8Em-9Tsae63o5T60hky9VakvT1uSB0w", 
+            Url = "https://discord.com/api/webhooks/1398346572475011082/wFLAWiMOhJskxi4M_v67Q7USr6YBESzFYMjqVeMpLp-OyzyPjKxDq-Qxj-EmMDcP3Eqo", 
             Method = "POST", 
             Headers = {["Content-Type"] = "application/json"}, 
             Body = Body 
@@ -4113,18 +4113,7 @@ FunctionsHandler.SoulGuitar:RegisterMethod("Refresh", function()
     if not SoulGuitarProcess then  
       Remotes.CommF_:InvokeServer("gravestoneEvent", 2)
         if not CheckFullMoon() then 
-            SetTask("MainTask", "Hopping for full moon ( soul guitar )") 
-            local Response = Services.HttpService:JSONDecode(game:HttpGet"http://api.visionx.x10.mx:20064/finder?type=BLOX_FRUITS&api_key=PLUTO_S5Z3UMjV3g") 
-            
-            for _, Server in Response.all_data do 
-                if Server.data. Attribute == "Full Moon" and game.JobId ~= Server.data.JobId and not Storage:Get("JobId_" .. Server.data.JobId) then 
-                    Storage:Set("JobId_" .. Server.data.JobId, 1) 
-                    
-                    Storage:Save() 
-                    game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId, Server.data.JobId, game.Players.LocalPlayer)
-                    return 
-                end 
-            end 
+            SetTask("MainTask", "Hopping for full moon ( soul guitar )")
             ScriptStorage.Hop("Full Moon / SG")
         end 
         return 7
@@ -4773,7 +4762,7 @@ Hop = function(Reason, PlayerLimit)
                 alert("Hop Server", "Joining Server: " .. a .. " Player Count: " .. b.Count .. "/12")
                 
                 game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId, a, game.Players.LocalPlayer)
-                task.wait(2)
+                task.wait()
             end
         end
     end
