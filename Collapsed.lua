@@ -2259,7 +2259,7 @@ function CombatController.Attack(MobTable, NearbyHit, Range, Callback)
                 if not MobHumanoid or MobHumanoid.Health <= 0 then 
                     if MonResult.Name == "Don Swan" then 
                         Storage:Set("SwanDefeated", true)
-                        ScriptStorage.Hop()
+                        Hop()
                     end 
                     break
                 end 
@@ -2280,11 +2280,11 @@ function CombatController.Attack(MobTable, NearbyHit, Range, Callback)
                             SetTask("SubTask", "Hop Server - Mob Health Unchanged ( " .. MobHumanoid.Health .. " / " .. MobHumanoid.MaxHealth .. ")")
                             alert("Stuck", "Mob health unchanged")
                             _G.Stop = true
-                            ScriptStorage.Hop("Mob Health Stuck")
+                            Hop("Mob Health Stuck")
                         end
                         
                         if ( MonResult:GetAttribute("FailureCount") or 0 ) > 5 then 
-                            ScriptStorage.Hop("Failed to attack")
+                            Hop("Failed to attack")
                         end 
                         if Count >= CombatController.MAX_ATTACK_DURATION and MobHumanoid.Health - MobHumanoid.MaxHealth == 0 then 
                             Count = 0 
@@ -2330,7 +2330,7 @@ function CombatController.Attack(MobTable, NearbyHit, Range, Callback)
             
             if (os.time() - LastFound) > 200 then 
                 alert("Cyndral", "Error while farming, rejoin")
-                ScriptStorage.Hop("Attack time is bigger than 180, hop")
+                Hop("Attack time is bigger than 180, hop")
                 return
             end 
             
@@ -2928,7 +2928,7 @@ FunctionsHandler.LevelFarm:RegisterMethod("Start", function(Level)
         CombatController.Attack(MonName)
         LevelFarmTTL = LevelFarmTTL + os.time() - AttackTime1 
         if LevelFarmTTL > 160 then 
-            --ScriptStorage.Hop("Level TTL is bigger than 160, hop")
+            --Hop("Level TTL is bigger than 160, hop")
         end 
     end
 end)
@@ -3843,7 +3843,7 @@ FunctionsHandler.UtillyItemsActivitation:RegisterMethod("Refresh", function()
                  
                 print("hop")
                 alert("Don Swan", "Hopping for don swan")
-                ScriptStorage.Hop("Hop for don swan")
+                Hop("Hop for don swan")
             end 
         end 
     end
@@ -4016,7 +4016,7 @@ FunctionsHandler.ThirdSeaPuzzle:RegisterMethod("Start", function()
         spawn(function() 
             alert("1102", "rejoin")
             task.wait(30)
-            ScriptStorage.Hop("Rejoin")
+            Hop("Rejoin")
         end) 
         
         alert("attack")
@@ -4114,7 +4114,7 @@ FunctionsHandler.SoulGuitar:RegisterMethod("Refresh", function()
       Remotes.CommF_:InvokeServer("gravestoneEvent", 2)
         if not CheckFullMoon() then 
             SetTask("MainTask", "Hopping for full moon ( soul guitar )")
-            ScriptStorage.Hop("Full Moon / SG")
+            Hop("Full Moon / SG")
         end 
         return 7
     end 
@@ -4161,7 +4161,7 @@ FunctionsHandler.SoulGuitar:RegisterMethod("Start", function(State)
         end 
         
         if TTL9 > 60 then 
-            return ScriptStorage.Hop("LOMGGGGGGGG SG 1")
+            return Hop("LOMGGGGGGGG SG 1")
         end
         
         local Objects = {} 
@@ -4184,7 +4184,7 @@ FunctionsHandler.SoulGuitar:RegisterMethod("Start", function(State)
                     SetTask('MainTask', "Soul Guitar task 1 / 5: Hit mob " .. Idx .. " / 6" ) 
                     FunctionsHandler.LocalPlayerController.Methods.EquipTool:Call("Melee")
                     if os.time() - StartTime19 > 60 then 
-                        ScriptStorage.Hop("So long nerds")
+                        Hop("So long nerds")
                     end 
                     
                     TweenController.Create(Object.HumanoidRootPart.CFrame + Vector3.new(0,50,0)) 
@@ -4194,7 +4194,7 @@ FunctionsHandler.SoulGuitar:RegisterMethod("Start", function(State)
             SetTask('MainTask', "Soul Guitar task 1 / 5: Attack") 
             while workspace.Enemies:FindFirstChild("Living Zombie") and task.wait() do 
                  if os.time() - StartTime19 > 60 then 
-                        ScriptStorage.Hop("So long nerds")
+                        Hop("So long nerds")
                     end 
                     
                 CombatController.Attack("Living Zombie")
@@ -4427,7 +4427,7 @@ FunctionsHandler.CursedDualKatana:RegisterMethod("Refresh", function()
             SetTask("SubTask", "CDK Quest / Waiting until pirate raid started")
             return 
         elseif Level == 3 and not ScriptStorage.Enemies["Cake Queen"] then 
-            ScriptStorage.Hop("Cake Queen Find")
+            Hop("Cake Queen Find")
             SetTask("SubTask", "CDK Quest / Waiting until Cake Queen boss spawned") 
             return 
         end 
@@ -4503,7 +4503,7 @@ FunctionsHandler.CursedDualKatana:RegisterMethod("DoDimension", function(Dimensi
         task.wait() 
     end 
     
-    ScriptStorage.Hop("Rejoin")
+    Hop("Rejoin")
 end) 
 
 FunctionsHandler.CursedDualKatana:RegisterMethod("Start", function(CachedData) 
@@ -4534,7 +4534,7 @@ FunctionsHandler.CursedDualKatana:RegisterMethod("Start", function(CachedData)
             end)
             task.wait(5)
             if CDKAttempts > 5 then 
-                ScriptStorage.Hop("CDK Stuck")
+                Hop("CDK Stuck")
             end
             
             CdkProgess = nil  
@@ -4911,7 +4911,7 @@ end)
                 else
                     if os.time() - NearbyRange > 30 then
                         if CaculateDistance(Position) < 100 then
-                            ScriptStorage.Hop("Nearby plr");
+                            Hop("Nearby plr");
                             task.wait(5)
     
                         else
@@ -5032,7 +5032,7 @@ end)
     spawn(function()
         task.wait(Config.Configuration.AutoHopDelay)
         if not Config.Configuration.AutoHop then
-            ScriptStorage.Hop("Autohop")
+            Hop("Autohop")
         end
     end)
     while task.wait() do
