@@ -23,7 +23,9 @@ function JSON.stringify(data)
 		elseif typeof(value) == "CFrame" then
 		    print('IsA: CFrame')
 			result[key] = encodeCFrame(value)
-		else
+		elseif typeof(value) == 'table' then 
+		    result[key] = JSON.stringify(value) 
+		else 
 			result[key] = value
 		end
 	end
