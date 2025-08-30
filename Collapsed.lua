@@ -9,7 +9,7 @@ end
             end 
         end
     end
-    
+    game:GetService("CoreGui").RobloxPromptGui.promptOverlay.ChildAdded:Connect(CheckKick)
 
 Config = {
     Team = "Pirates",
