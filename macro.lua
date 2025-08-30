@@ -63,7 +63,7 @@ tbl.__namecall = (function(self, ...)
             print(getnamecallmethod(), ...)
             MacroRecorder.SubmitData({
                 type = getnamecallmethod(), 
-                name = tostring(self),
+                name = (self.Name),
                 data = {...}
             })
         end 
