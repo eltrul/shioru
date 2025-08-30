@@ -35,7 +35,8 @@ function MacroRecorder.SubmitData (data)
     }) 
     table.insert(MacroRecorder.Keyframes, {
         type = data.type, 
-        data = data.data
+        data = data.data,
+		name = data.name
     })
     MacroRecorder.LastEmitted = tick()
     for i, v in MacroRecorder.Callbacks do 
