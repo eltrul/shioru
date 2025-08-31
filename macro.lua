@@ -56,6 +56,7 @@ function MacroRecorder.On(EventType, Callback)
 end
 
 function GetMacroPositionById (id) 
+    print('get', id)
     for i, v in workspace.Map.Entities:GetChildren() do
         if v:GetAttribute('ID') == id then 
             return v:GetModelCFrame()
