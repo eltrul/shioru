@@ -55,6 +55,14 @@ function MacroRecorder.On(EventType, Callback)
     })
 end
 
+function GetMacroPositionById (id) 
+    for i, v in workspace.Map.Entities:GetChildren() do
+        if v:GetAttribute('ID') == id then 
+            return v:GetModelCFrame()
+        end 
+    end 
+end 
+
 local tbl = getrawmetatable(game) 
 local old = tbl.__namecall
 setreadonly(tbl, false) 
@@ -65,7 +73,7 @@ tbl.__namecall = (function(self, ...)
             MacroRecorder.SubmitData({
                 type = getnamecallmethod(), 
                 name = (self.Name),
-                data = {...}
+                data = (self.Name == 'UpgradeUnit' or self.Name == 'SellUnit') and {GetMacroPositionById(...)} or {...}
             })
         end 
     end 
