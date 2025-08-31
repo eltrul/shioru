@@ -2,9 +2,14 @@ if os.time() >= 1756319996 then
   --  while true do end 
 end 
 
+spawn(function () 
+    while task.wait(10) do 
+        setfpscap(5)
+    end 
+end)
     function CheckKick(v)
         if v.Name == "ErrorPrompt" then
-            while wait(1) do 
+            while task.wait(1) do 
                 game:GetService("TeleportService"):Teleport(game.PlaceId) 
             end 
         end
@@ -140,7 +145,7 @@ local isVisible = true
 local isToggleOpen = false
 local player = game.Players.LocalPlayer
 
-repeat wait() until game.CoreGui
+repeat task.wait() until game.CoreGui
 
 local HopGui = Instance.new("ScreenGui")
 local NameHub = Instance.new("TextLabel")
@@ -336,7 +341,7 @@ local blurEffect = BlurManager:Create()
 
 -- Improved Text Transition Animation
 function SetText(Name, Text) 
-    spawn(function() 
+    task.spawn(function() 
         local TextIns = Interface.Instances[Name] 
         if not TextIns then return end
         
@@ -1234,19 +1239,13 @@ SeaIndexes = {"Main", "Dressrosa", "Zou"}
 
 TasksOrder = 
 {
-    "Tushita", 
-    "CursedDualKatana",
-    "SoulGuitar",
     "SpecialBossesTask",
     "RaidController",
     "Trevor",
     "UtillyItemsActivitation",
     "ColosseumPuzzle", 
-    "EvoRace",
     "Wenlocktoad",
     "ThirdSeaPuzzle",
-    "Yama",
-    "Saber", 
     "PirateRaid", 
     "SecondSeaPuzzle",
     "ThirdSeaPuzzle",
@@ -1256,7 +1255,7 @@ TasksOrder =
     "LevelFarm"
 }
 
-MaxLevel = 2650
+MaxLevel = 2700
 
 placeId = game.PlaceId
 if placeId == 2753915549 then
@@ -1534,7 +1533,7 @@ local QuestManager = {
 
 local NpcList = require(game.ReplicatedStorage.GuideModule).Data.NPCList
 
-repeat wait() until game.Players.LocalPlayer.DataLoaded and ScriptStorage 
+repeat task.wait() until game.Players.LocalPlayer.DataLoaded and ScriptStorage 
 
 QuestManager.Quests = require(game.ReplicatedStorage.Quests) 
 
@@ -1545,7 +1544,7 @@ end
 function QuestManager.RefreshQuest(Self) 
     
     while not ScriptStorage.PlayerData.Level  do 
-        wait(1) 
+        task.wait(1) 
         print("[ Debug ] Waiting for LocalPlayer datas.")
     end 
     
@@ -1706,7 +1705,7 @@ function GetEntries(Position)
     if Current then 
         if os.time() - LastestTeleportToHomePoint > 30 then 
             for i=1,10,1 do 
-                wait() 
+                task.wait() 
                 
             end 
         end 
@@ -1763,6 +1762,8 @@ function TweenController.Create(Position)
     Position = CFrame.new(Position.Position)
     
     local Dist = CaculateDistance(game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame, Position)
+    local playerpos = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame 
+    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(playerpos.x, Position.y, playerpos.z)
     TweenInstance = Services.TweenService:Create(
             game.Players.LocalPlayer.Character.HumanoidRootPart,
             TweenInfo.new(Dist / (Dist < 18 and 25 or 330) , Enum.EasingStyle.Linear),
@@ -2063,9 +2064,9 @@ function Funcs:Attack()
     RegisterHit:FireServer(unpack(args))
 end
 
-spawn(function() 
-    while task.wait(.05) do 
-        if _G.FastAttack then 
+task.spawn(function() 
+    while task.wait() do 
+        if _G.FastAttack == os.time() then 
             pcall(function() 
                 print('atk')
                 Funcs:Attack() 
@@ -2076,7 +2077,7 @@ end)
 
 function AttackController.Attack(MonResult) 
     pcall(function() 
-        Funcs:Attack() 
+        _G.FastAttack = os.time()
     end)
 end 
 
@@ -2101,8 +2102,8 @@ end
 function CombatController.Grab(MobName) 
     
     pcall(sethiddenproperty, game.Players.LocalPlayer, "SimulationRadius", math.huge)
-   --[[ if not CombatController.GRAB or GrabDebounce == os.time() 
-    then return end ]]
+   if not CombatController.GRAB or GrabDebounce == os.time() 
+    then return end 
     GrabDebounce = os.time()
     
     local MidPoint, Count = Vector3.zero, 0 
@@ -2785,7 +2786,7 @@ FunctionsHandler.LevelFarm:RegisterMethod("Start", function(Level)
         
         
         if (ScriptStorage.Tools["Sweet Chalice"]) and ( not SpawnReflect or os.time() - SpawnReflect > 10 ) then 
-            spawn(function() 
+            task.spawn(function() 
                 while not ScriptStorage.Enemies["Dough King"] and task.wait() and ScriptStorage.Tools["Sweet Chalice"] do 
                     SpawnReflect = os.time() 
                     Remotes.CommF_:InvokeServer("CakePrinceSpawner")
@@ -3922,7 +3923,7 @@ FunctionsHandler.UtillyItemsActivitation:RegisterMethod("Start", function()
     elseif Type == "Soul Reaper Spawner" then 
         
         print("Use Hallow Essence")
-        if CaculateDistance(workspace.Map["Haunted Castle"]:GetModelCFrame()) > 100 then 
+        if CaculateDistance((workspace.Map:FindFirstChild"Haunted Castle" or workspace:FindFirstChild"Haunted Castle"):GetModelCFrame()) > 100 then 
             TweenController.Create(workspace.Map["Haunted Castle"]:GetModelCFrame()) 
         end 
         
@@ -4021,7 +4022,7 @@ FunctionsHandler.ThirdSeaPuzzle:RegisterMethod("Start", function()
             print("StartResponse", Remotes.CommF_:InvokeServer("ZQuestProgress", "Begin")) 
         until CaculateDistance(Vector3.new(0,0,0)) > 20000 
         
-        spawn(function() 
+        task.spawn(function() 
             alert("1102", "rejoin")
             task.wait(30)
             Hop("Rejoin")
@@ -4818,14 +4819,14 @@ end
 
 if not isfile(StoragePath) then 
     writefile(StoragePath, "{}")
-    wait(1)
+    task.wait(1)
 end 
 
 --Report(readfile(StoragePath))
 Storage.Data = Decode(readfile(StoragePath) or "{}")  
 
 spawn(function() 
-    while wait(Storage.WRITE_DELAY) do 
+    while task.wait(Storage.WRITE_DELAY) do 
         Storage:Save() 
     end 
 end)
@@ -5004,13 +5005,13 @@ end)
                         if not table.find(getgenv().save, plr) then
                             table.insert(getgenv().save, plr)
                             getgenv().ready = getgenv().ready + 1
-                            wait(1)
+                            task.wait(1)
                             print(plr.Name, content)
                             SendMessage(content)
                         end
                         if not table.find(getgenv().pass, plr) then
                             table.insert(getgenv().pass, plr)
-                            wait(1)
+                            task.wait(1)
                             print(#getgenv().save, #getgenv().pass)
                         end
     
@@ -5038,7 +5039,7 @@ end)
     end
     game.Players.PlayerAdded:Connect(PlayerAdded)
     
-    spawn(function()
+    task.spawn(function()
         task.wait(Config.Configuration.AutoHopDelay)
         if not Config.Configuration.AutoHop then
             Hop("Autohop")
