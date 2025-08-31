@@ -9,6 +9,7 @@ end
             end 
         end
     end
+    
     game:GetService("CoreGui").RobloxPromptGui.promptOverlay.ChildAdded:Connect(CheckKick)
 
 Config = {
@@ -1764,7 +1765,7 @@ function TweenController.Create(Position)
     local Dist = CaculateDistance(game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame, Position)
     TweenInstance = Services.TweenService:Create(
             game.Players.LocalPlayer.Character.HumanoidRootPart,
-            TweenInfo.new(Dist / (Dist < 18 and 25 or 350) , Enum.EasingStyle.Linear),
+            TweenInfo.new(Dist / (Dist < 18 and 25 or 330) , Enum.EasingStyle.Linear),
             {CFrame = Position}
         ) 
     TweenInstance:Play()
@@ -1788,9 +1789,9 @@ local AttackConfig = {
     AttackDistance = 65,
     AttackMobs = true,
     AttackPlayers = true,
-    AttackCooldown = 0.2,
-    ComboResetTime = 0.3,
-    MaxCombo = 4,
+    AttackCooldown = 0.05,
+    ComboResetTime = 0.05,
+    MaxCombo = 2,
     HitboxLimbs = {"RightLowerArm", "RightUpperArm", "LeftLowerArm", "LeftUpperArm", "RightHand", "LeftHand"},
     AutoClickEnabled = true
 }
@@ -2063,9 +2064,10 @@ function Funcs:Attack()
 end
 
 spawn(function() 
-    while task.wait() do 
+    while task.wait(.05) do 
         if _G.FastAttack then 
             pcall(function() 
+                print('atk')
                 Funcs:Attack() 
             end)
         end 
@@ -3669,12 +3671,18 @@ FunctionsHandler.RaidController:RegisterMethod("Start", function()
             alert("Load Fruit", cRaidFruit.Name)
             Remotes.CommF_:InvokeServer("LoadFruit", cRaidFruit.Name)
             Remotes.CommF_:InvokeServer( "RaidsNpc", "Select", FunctionsHandler.RaidController:Get("CurrentChip"))
-            
+            task.wait(2)
         end 
         
         local RootRaidIsland = ({nil, "CircleIsland", "Boat Castle"})[SeaIndex]
         FunctionsHandler.LocalPlayerController.Methods.EquipTool:Call("Special Microchip")
-        TweenController.Create(workspace.Map[RootRaidIsland].RaidSummon2.Button:GetModelCFrame())
+        
+        if not workspace.Map:FindFirstChild(RootRaidIsland) then 
+            task.wait(1)
+            return TweenController.Create(game:GetService("ReplicatedStorage").FakeIslands:FindFirstChild('RootRaidIsland'):GetModelCFrame())
+        end 
+        
+        
         fireclickdetector(workspace.Map[RootRaidIsland].RaidSummon2.Button.Main.ClickDetector) 
         local RaidStartSenque = os.time() 
         SetTask("MainTask", "Auto Raid - Waiting Until Raid Is Started") 
@@ -4044,8 +4052,8 @@ end)
 
 FunctionsHandler.Yama:RegisterMethod("Start", function() 
     repeat task.wait() 
-        TweenController.Create(workspace.Map.Waterfall:GetModelCFrame()) 
-    until workspace.Map.Waterfall:FindFirstChild("SealedKatana") 
+        TweenController.Create(game:GetService("ReplicatedStorage").FakeIslands.Waterfall:GetModelCFrame()) 
+    until workspace.Map:FindFirstChild('Waterfall') and workspace.Map.Waterfall:FindFirstChild("SealedKatana") 
     
     fireclickdetector(workspace.Map.Waterfall.SealedKatana.Hitbox.ClickDetector)
 end)
@@ -4749,24 +4757,25 @@ if SeaIndex ~= 1 then
 end
 
 Hop = function(Reason, PlayerLimit) 
-    _G.Hopping = true 
-    Report(Reason or "Hoping")
-    for i = 1, 100, 1 do 
-        
-        for a, b in game.ReplicatedStorage.__ServerBrowser:InvokeServer(i) do
-            if a ~= game.JobId and b.Count < (PlayerLimit or 9) then
-                
-                task.wait(1)
-                
-                SetTask("MainTask", "Hop Server - Joining Server: " .. a .. " Player Count: " .. b.Count .. "/12")
-                alert("Hop Server", "Joining Server: " .. a .. " Player Count: " .. b.Count .. "/12")
-                
-                game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId, a, game.Players.LocalPlayer)
-                task.wait()
+    local servers = {}
+    local req = game:HttpGet("https://games.roblox.com/v1/games/" .. game.PlaceId .. "/servers/Public?sortOrder=Desc&limit=100&excludeFullGames=true")
+    local body = game:GetService('HttpService'):JSONDecode(req)
+
+    if body and body.data then
+        for i, v in next, body.data do
+            if type(v) == "table" and tonumber(v.playing) and tonumber(v.maxPlayers) and v.playing < v.maxPlayers and v.id ~= JobId then
+                table.insert(servers, 1, v.id)
             end
         end
     end
+
+    if #servers > 0 then
+        game:GetService('TeleportService'):TeleportToPlaceInstance(game.PlaceId, servers[math.random(1, #servers)], game.Players.LocalPlayer)
+    else
+        return alert("Serverhop", "Couldn't find a server.")
+    end    
 end 
+
 
 Storage = {
     WRITE_DELAY = 5, 
