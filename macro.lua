@@ -71,11 +71,14 @@ tbl.__namecall = (function(self, ...)
     if self and typeof(self) == 'Instance' and tostring(self.Parent) == 'RemoteFunctions' then 
         if  MacroRecorder.IsRecording then 
             print(getnamecallmethod(), ...)
-            MacroRecorder.SubmitData({
-                type = getnamecallmethod(), 
-                name = (self.Name),
-                data = (self.Name == 'UpgradeUnit' or self.Name == 'SellUnit') and {GetMacroPositionById(...)} or {...}
-            })
+            local mm = {...}
+            spawn(function()
+                MacroRecorder.SubmitData({
+                    type = getnamecallmethod(), 
+                    name = (self.Name),
+                    data = (self.Name == 'UpgradeUnit' or self.Name == 'SellUnit') and {GetMacroPositionById(mm[1])} or mm
+                })
+            end)
         end 
     end 
     return old(self, unpack({...}))
