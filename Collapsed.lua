@@ -3683,7 +3683,7 @@ FunctionsHandler.RaidController:RegisterMethod("Start", function()
         end 
         
         
-        fireclickdetector((workspace.Map[RootRaidIsland] or workspace[RootRaidIsland]).RaidSummon2.Button.Main.ClickDetector) 
+        fireclickdetector((workspace.Map:FindFirstChild(RootRaidIsland) or workspace:FindFirstChild(RootRaidIsland)).RaidSummon2.Button.Main.ClickDetector) 
         local RaidStartSenque = os.time() 
         SetTask("MainTask", "Auto Raid - Waiting Until Raid Is Started") 
         repeat task.wait() until os.time() - ( LastRaidAlert2 or 0 ) < 20 or os.time() - RaidStartSenque > 30 
