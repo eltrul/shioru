@@ -3677,13 +3677,13 @@ FunctionsHandler.RaidController:RegisterMethod("Start", function()
         local RootRaidIsland = ({nil, "CircleIsland", "Boat Castle"})[SeaIndex]
         FunctionsHandler.LocalPlayerController.Methods.EquipTool:Call("Special Microchip")
         
-        if not workspace.Map:FindFirstChild(RootRaidIsland) then 
+        if not workspace.Map:FindFirstChild(RootRaidIsland) and not workspace:FindFirstChild(RootRaidIsland) then 
             task.wait(1)
             return TweenController.Create(game:GetService("ReplicatedStorage").FakeIslands:FindFirstChild(RootRaidIsland):GetModelCFrame())
         end 
         
         
-        fireclickdetector(workspace.Map[RootRaidIsland].RaidSummon2.Button.Main.ClickDetector) 
+        fireclickdetector((workspace.Map[RootRaidIsland] or workspace[RootRaidIsland]).RaidSummon2.Button.Main.ClickDetector) 
         local RaidStartSenque = os.time() 
         SetTask("MainTask", "Auto Raid - Waiting Until Raid Is Started") 
         repeat task.wait() until os.time() - ( LastRaidAlert2 or 0 ) < 20 or os.time() - RaidStartSenque > 30 
