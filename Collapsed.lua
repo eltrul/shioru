@@ -3679,7 +3679,7 @@ FunctionsHandler.RaidController:RegisterMethod("Start", function()
         
         if not workspace.Map:FindFirstChild(RootRaidIsland) then 
             task.wait(1)
-            return TweenController.Create(game:GetService("ReplicatedStorage").FakeIslands:FindFirstChild('RootRaidIsland'):GetModelCFrame())
+            return TweenController.Create(game:GetService("ReplicatedStorage").FakeIslands:FindFirstChild(RootRaidIsland):GetModelCFrame())
         end 
         
         
