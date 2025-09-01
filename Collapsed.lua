@@ -4,14 +4,20 @@ end
 
 spawn(function () 
     while task.wait(10) do 
-        setfpscap(5)
+        setfpscap(500)
     end 
 end)
+    
     function CheckKick(v)
         if v.Name == "ErrorPrompt" then
-            while task.wait(1) do 
-                game:GetService("TeleportService"):Teleport(game.PlaceId) 
-            end 
+            if v.TitleFrame.ErrorTitle.Text == 'Teleport Failed' then
+                if String.find(v.MessageArea.ErrorFrame.ErrorMessage, 'Unable to join game') then
+                    while true do end 
+                end
+            end
+        else 
+            game:GetService('TeleportService'):Teleport(game.PlaceId)
+            v:Destroy()
         end
     end
     
